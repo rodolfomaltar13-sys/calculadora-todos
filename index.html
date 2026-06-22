@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculadora de Benefícios — Cartão de TODOS</title>
+<title>Calculadora de Benefícios Cartão de TODOS</title>
 <style>
   *{box-sizing:border-box;margin:0;padding:0}
   body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif;background:#f5f6f7;color:#1a1a1a;min-height:100vh}
@@ -21,4 +21,252 @@
   .card-title{font-size:15px;font-weight:600;color:#1a1a1a;line-height:1.3}
   .card-sub{font-size:12px;color:#777;margin-top:2px}
   label{display:block;font-size:13px;color:#555;margin-bottom:5px;font-weight:500}
-  select,input[type=text],input[type=number]{width:100%;font-size:14p
+  select,input[type=text],input[type=number]{width:100%;font-size:14px;padding:10px 12px;border:1.5px solid #e0e0e0;border-radius:9px;background:#fafafa;color:#1a1a1a;-webkit-appearance:none;appearance:none;outline:none;transition:border-color .2s}
+  select:focus,input:focus{border-color:#00A078;background:#fff}
+  select{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:32px}
+  .field{margin-bottom:12px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .est-box{background:#f0faf6;border:1px solid #b2dfdb;border-radius:10px;padding:12px 14px;margin-top:10px}
+  .est-row{display:flex;justify-content:space-between;font-size:13px;margin-bottom:4px}
+  .est-row .lbl{color:#555}
+  .est-row .val{font-weight:600;color:#1a1a1a}
+  .est-total{display:flex;justify-content:space-between;font-size:14px;padding-top:8px;border-top:1px solid #b2dfdb;margin-top:6px}
+  .est-total .lbl{font-weight:600;color:#1a1a1a}
+  .est-total .val{font-weight:700;color:#00875A}
+  .gratis{color:#00875A;font-weight:600}
+  .resumo-card{background:#00A078;border-radius:14px;padding:20px;margin-bottom:14px;color:#fff}
+  .resumo-card h2{font-size:15px;font-weight:600;margin-bottom:14px;opacity:0.9}
+  .resumo-row{display:flex;justify-content:space-between;font-size:14px;margin-bottom:8px;border-bottom:1px solid rgba(255,255,255,0.15);padding-bottom:8px}
+  .resumo-row .rl{opacity:0.85}
+  .resumo-row .rv{font-weight:700}
+  .resumo-total{display:flex;justify-content:space-between;font-size:16px;margin-top:12px;padding-top:12px;border-top:2px solid rgba(255,255,255,0.3)}
+  .resumo-total .rl{font-weight:600}
+  .resumo-total .rv{font-weight:800;font-size:18px}
+  .btn-copy{width:100%;padding:14px;font-size:15px;font-weight:700;background:#00A078;color:#fff;border:none;border-radius:12px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .2s}
+  .btn-copy:hover{background:#008A68}
+  .nome-card{background:#fff;border-radius:14px;padding:20px;margin-bottom:14px;border:1px solid #e8e8e8}
+  .nome-card h2{font-size:14px;font-weight:600;color:#555;margin-bottom:14px;text-transform:uppercase;letter-spacing:0.5px}
+  .hidden{display:none}
+  .mensagem{background:#fff8e1;border:1px solid #ffe082;border-radius:10px;padding:12px 14px;font-size:13px;color:#7B4F00;margin-bottom:14px;line-height:1.5}
+  .copied-msg{text-align:center;color:#00875A;font-size:13px;font-weight:500;margin-top:10px;display:none}
+  @media(max-width:400px){.row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>Calculadora de Benefícios</h1>
+  <p>Cartão de TODOS Campo Grande</p>
+</div>
+<div class="container">
+  <div class="mensagem">👋 Olá! Preencha os campos abaixo com seus hábitos de consumo. Não leva mais de 2 minutos e vai mostrar exatamente quanto você economiza todo mês com o Cartão de TODOS.</div>
+
+  <div class="nome-card">
+    <h2>Seus dados</h2>
+    <div class="field"><label>Nome completo</label><input type="text" id="nome" placeholder="Ex: Maria da Silva" oninput="calcular()"></div>
+    <div class="field"><label>WhatsApp (com DDD)</label><input type="text" id="wpp" placeholder="Ex: 67 99999-0000" oninput="calcular()"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="icon-wrap icon-verde">💊</div><div><div class="card-title">Farmácia</div><div class="card-sub">Drogasil e Droga Raia. Quanto você gasta por mês com medicamentos?</div></div></div>
+    <div class="field"><label>Tipo de produto</label>
+      <select id="farm_tipo" onchange="calcular()">
+        <option value="">Selecione uma opção</option>
+        <option value="marca">Medicamentos de Balcão (Marca)</option>
+        <option value="generico">Medicamentos de Balcão (Genérico)</option>
+        <option value="prateleira_marca">Artigos e Medicamentos de Prateleira (Marca)</option>
+        <option value="prateleira_generico">Artigos e Medicamentos de Prateleira (Genérico)</option>
+        <option value="perfumaria">Perfumaria</option>
+        <option value="nao">Não costumo comprar em farmácia</option>
+      </select>
+    </div>
+    <div class="field hidden" id="farm_valor_wrap"><label>Valor médio gasto por mês (R$)</label><input type="number" id="farm_valor" placeholder="0,00" min="0" step="0.01" oninput="calcular()"></div>
+    <div class="est-box hidden" id="farm_result"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="icon-wrap icon-laranja">🔥</div><div><div class="card-title">Gás de cozinha</div><div class="card-sub">Ultragaz. Quanto você gasta com botijão de gás?</div></div></div>
+    <div class="row">
+      <div class="field"><label>Com que frequência compra?</label>
+        <select id="gas_freq" onchange="calcular()">
+          <option value="">Selecione</option>
+          <option value="1">Todo mês</option>
+          <option value="2">A cada 2 meses</option>
+          <option value="3">A cada 3 meses</option>
+          <option value="4">A cada 4 meses</option>
+          <option value="5">A cada 5 meses</option>
+          <option value="6">A cada 6 meses</option>
+          <option value="0">Não uso Ultragaz</option>
+        </select>
+      </div>
+      <div class="field hidden" id="gas_valor_wrap"><label>Valor do botijão (R$)</label><input type="number" id="gas_valor" placeholder="0,00" min="0" step="0.01" oninput="calcular()"></div>
+    </div>
+    <div class="est-box hidden" id="gas_result"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="icon-wrap icon-roxo">📚</div><div><div class="card-title">Cursos</div><div class="card-sub">Refuturiza. Você faz ou pretende fazer algum curso?</div></div></div>
+    <div class="field"><label>Área de estudo</label>
+      <select id="curso_tipo" onchange="calcular()">
+        <option value="">Selecione uma opção</option>
+        <option value="profissionalizante">Cursos profissionalizantes</option>
+        <option value="preparatorio">Cursos preparatórios</option>
+        <option value="nao">Não faço cursos no momento</option>
+      </select>
+    </div>
+    <div class="field hidden" id="curso_valor_wrap"><label>Quanto você paga por mês no curso atual? (R$)</label><input type="number" id="curso_valor" placeholder="0,00" min="0" step="0.01" oninput="calcular()"></div>
+    <div class="est-box hidden" id="curso_result"></div>
+  </div>
+
+  <div class="card">
+    <div class="card-header"><div class="icon-wrap icon-azul">🩺</div><div><div class="card-title">Consultas médicas</div><div class="card-sub">Amor Saúde. Quanto você gasta com consultas por mês?</div></div></div>
+    <div class="row">
+      <div class="field"><label>Tipo de consulta</label>
+        <select id="med_tipo" onchange="calcular()">
+          <option value="">Selecione</option>
+          <option value="clinico">Clínico Geral</option>
+          <option value="especialista">Especialista / Demais Áreas</option>
+          <option value="nao">Não faço consultas</option>
+        </select>
+      </div>
+      <div class="field hidden" id="med_valor_wrap"><label>Valor mensal gasto (R$)</label><input type="number" id="med_valor" placeholder="0,00" min="0" step="0.01" oninput="calcular()"></div>
+    </div>
+    <div class="est-box hidden" id="med_result"></div>
+  </div>
+
+  <div class="resumo-card hidden" id="resumo_total">
+    <h2>Resumo da sua economia</h2>
+    <div class="resumo-row"><span class="rl">Mensalidade Cartão de TODOS</span><span class="rv">R$ 33,40/mês</span></div>
+    <div class="resumo-row"><span class="rl">Desconto acumulado</span><span class="rv" id="r_desconto">0,00</span></div>
+    <div class="resumo-row"><span class="rl">Cashback acumulado</span><span class="rv" id="r_cashback">0,00</span></div>
+    <div class="resumo-total"><span class="rl">Benefício mensal estimado</span><span class="rv" id="r_total">0,00</span></div>
+  </div>
+
+  <button class="btn-copy" onclick="copiarResumo()">📋 Copiar resumo para o atendente</button>
+  <div class="copied-msg" id="copied_msg">✅ Resumo copiado! Cole no WhatsApp para o seu atendente.</div>
+</div>
+
+<script>
+const fmt = v => 'R$ ' + v.toFixed(2).replace('.', ',').replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+const show = id => document.getElementById(id).classList.remove('hidden');
+const hide = id => document.getElementById(id).classList.add('hidden');
+
+function calcular(){
+  const ft = document.getElementById('farm_tipo').value;
+  const gf = document.getElementById('gas_freq').value;
+  const ct = document.getElementById('curso_tipo').value;
+  const mt = document.getElementById('med_tipo').value;
+
+  ft && ft !== 'nao' ? show('farm_valor_wrap') : hide('farm_valor_wrap');
+  gf && gf !== '0' ? show('gas_valor_wrap') : hide('gas_valor_wrap');
+  ct && ct !== 'nao' ? show('curso_valor_wrap') : hide('curso_valor_wrap');
+  mt && mt !== 'nao' ? show('med_valor_wrap') : hide('med_valor_wrap');
+
+  let totalDesc = 0, totalCash = 0, totalBenef = 0;
+
+  const fv = parseFloat(document.getElementById('farm_valor').value) || 0;
+  if(ft && ft !== 'nao' && fv > 0){
+    const rates = {marca:[0.15,0.02],generico:[0.35,0.10],prateleira_marca:[0.05,0.04],prateleira_generico:[0.05,0.05],perfumaria:[0.05,0.02]};
+    const r = rates[ft] || [0,0];
+    const fd = fv * r[0], fc = fv * r[1];
+    totalDesc += fd; totalCash += fc; totalBenef += fd + fc;
+    document.getElementById('farm_result').innerHTML =
+      `<div class="est-row"><span class="lbl">Desconto ${Math.round(r[0]*100)}%</span><span class="val">${fmt(fd)}</span></div>
+       <div class="est-row"><span class="lbl">Cashback ${Math.round(r[1]*100)}%</span><span class="val">${fmt(fc)}</span></div>
+       <div class="est-total"><span class="lbl">Benefício mensal</span><span class="val">${fmt(fd+fc)}</span></div>`;
+    show('farm_result');
+  } else { hide('farm_result'); }
+
+  const gv = parseFloat(document.getElementById('gas_valor').value) || 0;
+  if(gf && gf !== '0' && gv > 0){
+    const freq = parseInt(gf);
+    const gc = (gv * 0.12) / freq;
+    totalCash += gc; totalBenef += gc;
+    document.getElementById('gas_result').innerHTML =
+      `<div class="est-row"><span class="lbl">Cashback 12% proporcional/mês</span><span class="val">${fmt(gc)}</span></div>
+       <div class="est-row"><span class="lbl">Taxa de entrega</span><span class="val gratis">Grátis</span></div>
+       <div class="est-total"><span class="lbl">Benefício mensal</span><span class="val">${fmt(gc)}</span></div>`;
+    show('gas_result');
+  } else { hide('gas_result'); }
+
+  const cv = parseFloat(document.getElementById('curso_valor').value) || 0;
+  if(ct && ct !== 'nao'){
+    const cb = cv > 0 ? Math.max(0, cv - 14.99) : 0;
+    totalBenef += cb;
+    const extra = cv > 0
+      ? `<div class="est-row"><span class="lbl">Você paga hoje</span><span class="val">${fmt(cv)}</span></div>
+         <div class="est-row"><span class="lbl">Com Cartão de TODOS</span><span class="val gratis">R$ 14,99/mês</span></div>
+         <div class="est-total"><span class="lbl">Benefício mensal</span><span class="val">${fmt(cb)}</span></div>`
+      : `<div class="est-row"><span class="lbl">Plano Refuturiza com Cartão de TODOS</span><span class="val gratis">R$ 14,99/mês</span></div>`;
+    document.getElementById('curso_result').innerHTML = extra;
+    show('curso_result');
+  } else { hide('curso_result'); }
+
+  const mv = parseFloat(document.getElementById('med_valor').value) || 0;
+  if(mt && mt !== 'nao' && mv > 0){
+    const preco = mt === 'clinico' ? 30 : 40;
+    const mb = Math.max(0, mv - preco);
+    totalBenef += mb;
+    document.getElementById('med_result').innerHTML =
+      `<div class="est-row"><span class="lbl">Você paga hoje</span><span class="val">${fmt(mv)}</span></div>
+       <div class="est-row"><span class="lbl">Com Cartão de TODOS</span><span class="val gratis">${fmt(preco)}</span></div>
+       <div class="est-total"><span class="lbl">Benefício mensal</span><span class="val">${fmt(mb)}</span></div>`;
+    show('med_result');
+  } else { hide('med_result'); }
+
+  if(ft || gf || ct || mt){
+    document.getElementById('r_desconto').textContent = fmt(totalDesc);
+    document.getElementById('r_cashback').textContent = fmt(totalCash);
+    document.getElementById('r_total').textContent = fmt(totalBenef);
+    show('resumo_total');
+  } else { hide('resumo_total'); }
+}
+
+function copiarResumo(){
+  const nome = document.getElementById('nome').value || 'Não informado';
+  const wpp = document.getElementById('wpp').value || 'Não informado';
+  const sel = id => { const el = document.getElementById(id); return el.options[el.selectedIndex]?.text || 'Não informado'; };
+  const val = id => { const v = document.getElementById(id).value; return v ? 'R$ '+parseFloat(v).toFixed(2).replace('.',',') : 'N/A'; };
+
+  const txt = `📋 *Formulário de Benefícios Cartão de TODOS*
+
+👤 *Nome:* ${nome}
+📱 *WhatsApp:* ${wpp}
+
+💊 *Farmácia*
+- Tipo: ${sel('farm_tipo')}
+- Valor mensal: ${document.getElementById('farm_valor').value ? val('farm_valor') : 'N/A'}
+
+🔥 *Gás de cozinha*
+- Frequência: ${sel('gas_freq')}
+- Valor do botijão: ${document.getElementById('gas_valor').value ? val('gas_valor') : 'N/A'}
+
+📚 *Cursos*
+- Área: ${sel('curso_tipo')}
+- Valor mensal: ${document.getElementById('curso_valor').value ? val('curso_valor') : 'N/A'}
+
+🩺 *Consultas médicas*
+- Tipo: ${sel('med_tipo')}
+- Valor mensal: ${document.getElementById('med_valor').value ? val('med_valor') : 'N/A'}
+
+💰 *Estimativa de benefícios*
+- Desconto acumulado: ${document.getElementById('r_desconto')?.textContent || 'N/A'}
+- Cashback acumulado: ${document.getElementById('r_cashback')?.textContent || 'N/A'}
+- *Benefício mensal estimado: ${document.getElementById('r_total')?.textContent || 'N/A'}*
+
+_Gerado pela equipe Cartão de TODOS Campo Grande_`;
+
+  navigator.clipboard.writeText(txt).then(() => {
+    document.getElementById('copied_msg').style.display = 'block';
+    setTimeout(() => document.getElementById('copied_msg').style.display = 'none', 4000);
+  }).catch(() => {
+    const ta = document.createElement('textarea');
+    ta.value = txt; ta.style.position='fixed'; ta.style.opacity='0';
+    document.body.appendChild(ta); ta.select(); document.execCommand('copy');
+    document.body.removeChild(ta);
+    document.getElementById('copied_msg').style.display = 'block';
+    setTimeout(() => document.getElementById('copied_msg').style.display = 'none', 4000);
+  });
+}
+</script>
+</body>
+</html>
