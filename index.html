@@ -253,7 +253,7 @@ function copiarResumo(){
 - Cashback acumulado: ${document.getElementById('r_cashback')?.textContent || 'N/A'}
 - *Benefício mensal estimado: ${document.getElementById('r_total')?.textContent || 'N/A'}*
 
-_Gerado pela equipe Cartão de TODOS Campo Grande_`;
+_Preenchido pelo titular do Cartão de TODOS_`;
 
   navigator.clipboard.writeText(txt).then(() => {
     document.getElementById('copied_msg').style.display = 'block';
